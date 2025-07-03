@@ -21,6 +21,7 @@
             --success-color: #9ece6a;
             --accent-color: #7aa2f7;
             --danger-color: #f7768e;
+            --logo-bg: #414868;
         }
 
         body.light-theme {
@@ -34,6 +35,7 @@
             --success-color: #41a6b5;
             --accent-color: #0d87e9;
             --danger-color: #d94f4f;
+            --logo-bg: #d8dee8;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
@@ -65,6 +67,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
@@ -79,18 +82,58 @@
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.2em;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
+        .header-title { display: flex; align-items: center; gap: 1rem; }
 
-        .header-controls {
+        .logo-placeholder {
+            width: 100px;
+            height: 40px;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--text-muted);
+            font-size: 0.7em;
+            background-image: url('assets/wingsacademy_logo.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
+
+        .logo-placeholder span {
+             display: none;
+        }
+
+        header h1 { margin: 0; font-size: 1.2em; color: var(--text-primary); font-weight: 500; }
+        .header-controls { display: flex; align-items: center; gap: 1rem; }
+        .toggle-switch { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85em; color: var(--text-secondary); }
+        .toggle-switch input { height: 0; width: 0; visibility: hidden; }
+
+        .toggle-switch label {
+            cursor: pointer;
+            text-indent: -9999px;
+            width: 40px;
+            height: 20px;
+            background: var(--surface-color);
+            display: block;
+            border-radius: 100px;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .toggle-switch label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: var(--text-muted);
+            border-radius: 16px;
+            transition: 0.3s;
+        }
+
+        .toggle-switch input:checked + label { background: var(--accent-color); }
+        .toggle-switch input:checked + label:after { background: #fff; left: calc(100% - 2px); transform: translateX(-100%); }
 
         .header-controls select, .header-controls button {
             background-color: var(--surface-color);
@@ -103,26 +146,9 @@
             cursor: pointer;
         }
 
-        #theme-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #theme-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--text-secondary);
-            transition: fill 0.2s ease;
-        }
-
-        #theme-toggle:hover svg {
-            fill: var(--text-primary);
-        }
+        #theme-toggle { background: none; border: none; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; }
+        #theme-toggle svg { width: 20px; height: 20px; fill: var(--text-secondary); transition: fill 0.2s ease; }
+        #theme-toggle:hover svg { fill: var(--text-primary); }
 
         .tab-nav {
             display: flex;
@@ -148,14 +174,48 @@
             border-bottom: 3px solid transparent;
         }
 
-        .tab-nav button:hover {
-            background-color: var(--border-color);
-            color: var(--text-primary);
+        .tab-nav button:hover { background-color: var(--border-color); color: var(--text-primary); }
+        .tab-nav button.active { color: var(--accent-color); border-bottom-color: var(--accent-color); }
+
+        .auto-advance-popup {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success-color);
+            color: var(--bg-color);
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 100;
+            cursor: pointer;
+            animation: slideDown 0.5s ease-out forwards;
         }
 
-        .tab-nav button.active {
-            color: var(--accent-color);
-            border-bottom-color: var(--accent-color);
+        .auto-advance-popup.show {
+            display: flex;
+        }
+
+        @keyframes slideDown {
+            from { top: 90px; opacity: 0; }
+            to { top: 120px; opacity: 1; }
+        }
+
+        .auto-advance-popup-text {
+            font-weight: 500;
+        }
+
+        .auto-advance-popup-dismiss {
+            background: none;
+            border: none;
+            color: var(--bg-color);
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            line-height: 1;
         }
 
         .content-area {
@@ -164,10 +224,7 @@
             flex-grow: 1;
         }
 
-        .checklist-section { display: none; }
-        .checklist-section.active { display: block; }
-
-        .checklist-section h2 {
+        .checklist-group h2 {
             font-size: 1.4em;
             color: var(--accent-color);
             border-bottom: 1px solid var(--border-color);
@@ -177,328 +234,120 @@
             transition: color var(--transition-speed);
         }
 
-        .checklist-section h2:not(:first-child) {
-            margin-top: 2rem;
+        .checklist-group:not(:first-child) h2 { margin-top: 2rem; }
+        .checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+
+        .checklist-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1rem;
+            background-color: var(--card-color); border-radius: 8px; border-left: 4px solid var(--border-color);
+            cursor: pointer; transition: all 0.2s ease-in-out; user-select: none;
         }
 
-        .checklist {
-            list-style: none;
-            padding: 0; margin: 0;
-            display: grid;
-            gap: 0.75rem;
+        .verbose-mode .simplified-item, .simplified-mode .verbose-item { display: none; }
+        .checklist-item:hover { border-left-color: var(--accent-color); transform: translateY(-2px); }
+        .checklist-item .item-name { flex-grow: 1; padding-right: 1rem; }
+        .checklist-item .item-status {
+            font-weight: 700; color: var(--accent-color); background-color: rgba(122, 162, 247, 0.1);
+            padding: 0.2rem 0.6rem; border-radius: 12px; text-align: right; min-width: 50px;
+            font-size: 0.9em; transition: color var(--transition-speed), background-color var(--transition-speed);
         }
-
-        .checklist li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 1rem;
-            background-color: var(--card-color);
-            border-radius: 8px;
-            border-left: 4px solid var(--border-color);
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            user-select: none;
+        .checklist-item.checked {
+            color: var(--text-muted); border-left-width: 8px; border-left-color: var(--success-color);
+            text-decoration: line-through; transform: none;
         }
-
-        .checklist li:hover {
-            border-left-color: var(--accent-color);
-            transform: translateY(-2px);
-        }
-
-        .checklist li .item-name {
-            flex-grow: 1;
-            padding-right: 1rem;
-        }
-
-        .checklist li .item-status {
-            font-weight: 700;
-            color: var(--accent-color);
-            background-color: rgba(122, 162, 247, 0.1);
-            padding: 0.2rem 0.6rem;
-            border-radius: 12px;
-            text-align: right;
-            min-width: 50px;
-            font-size: 0.9em;
-            transition: color var(--transition-speed), background-color var(--transition-speed);
-        }
-
-        .checklist li.checked {
-            color: var(--text-muted);
-            border-left-width: 8px;
-            border-left-color: var(--success-color);
-            text-decoration: line-through;
-            transform: none;
-        }
-
-        .checklist li.checked .item-status {
-            color: var(--text-muted);
-            background-color: rgba(86, 95, 137, 0.2);
-            text-decoration: none;
-        }
-
+        .checklist-item.checked .item-status { color: var(--text-muted); background-color: rgba(86, 95, 137, 0.2); text-decoration: none; }
         .pw-only { display: none; }
 
         footer {
-            padding: 1rem 1.5rem;
-            background-color: var(--card-color);
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 1rem 1.5rem; background-color: var(--card-color); border-top: 1px solid var(--border-color);
+            flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
-        .footer-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .footer-text {
-            font-size: 0.75em;
-            color: var(--text-muted);
-            flex-basis: 200px;
-        }
-
-        .footer-text:first-child {
-            text-align: left;
-        }
-
-        .footer-text:last-child {
-            text-align: right;
-        }
-
+        .footer-buttons { display: flex; gap: 1rem; }
+        .footer-text { font-size: 0.75em; color: var(--text-muted); flex-basis: 200px; }
+        .footer-text:first-child { text-align: left; }
+        .footer-text:last-child { text-align: right; }
         footer button {
-            background-color: var(--surface-color);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s ease;
+            background-color: var(--surface-color); color: var(--text-secondary); border: 1px solid var(--border-color);
+            padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;
         }
-
-        footer button:hover {
-            background-color: var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: var(--surface-color);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            border: 1px solid var(--border-color);
-        }
-
-        .modal-content p {
-            margin: 0 0 1.5rem 0;
-            color: var(--text-primary);
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .modal-buttons button {
-            padding: 0.75rem 1.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            min-width: 100px;
-        }
-
-        #modal-confirm {
-            background-color: var(--danger-color);
-            color: #fff;
-            border-color: var(--danger-color);
-        }
-
-        #modal-cancel {
-            background-color: var(--surface-color);
-            color: var(--text-secondary);
-        }
+        footer button:hover { background-color: var(--border-color); color: var(--text-primary); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background-color: var(--surface-color); padding: 2rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: center; width: 90%; max-width: 400px; border: 1px solid var(--border-color); }
+        .modal-content p { margin: 0 0 1.5rem 0; color: var(--text-primary); }
+        .modal-buttons { display: flex; justify-content: center; gap: 1rem; }
+        .modal-buttons button { padding: 0.75rem 1.5rem; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-weight: 700; min-width: 100px; }
+        #modal-confirm { background-color: var(--danger-color); color: #fff; border-color: var(--danger-color); }
+        #modal-cancel { background-color: var(--surface-color); color: var(--text-secondary); }
 
         @media (max-width: 768px) {
             body { padding: 0; }
             .container { height: 100vh; margin: 0; border-radius: 0; }
-            header h1 { font-size: 1.1em; }
+            .header-title { gap: 0.5rem; }
+            header h1 { font-size: 1.0em; }
+            .toggle-switch span { display: none; }
+            .header-controls { gap: 0.5rem; }
             .tab-nav { flex-wrap: wrap; }
-            .tab-nav button { font-size: 0.8em; padding: 0.6rem 0.4rem; flex-basis: 45%; }
+            .tab-nav button { font-size: 0.8em; padding: 0.6rem 0.4rem; flex-basis: 30%; }
+            .auto-advance-popup { top: 155px; width: 90%; }
+            @keyframes slideDown { from { top: 125px; opacity: 0; } to { top: 155px; opacity: 1; } }
             .content-area { padding: 1rem; }
-            .checklist-section h2 { font-size: 1.2em; }
+            .checklist-group h2 { font-size: 1.2em; }
             footer { flex-direction: column; gap: 0.5rem; padding: 0.75rem; }
             .footer-text { flex-basis: auto; text-align: center !important; }
         }
     </style>
 </head>
-<body class="dark-theme">
+<body class="dark-theme simplified-mode">
 
     <div class="container">
         <header>
-            <h1>A320neo Checklist</h1>
+            <div class="header-title">
+                <div class="logo-placeholder"><span></span></div>
+                <h1>A320neo Checklist</h1>
+            </div>
             <div class="header-controls">
+                <div class="toggle-switch">
+                    <span>Verbose Mode</span>
+                    <input type="checkbox" id="mode-toggle" />
+                    <label for="mode-toggle">Toggle Mode</label>
+                </div>
                 <select id="engine-select">
                     <option value="CFM">CFM LEAP-1A</option>
                     <option value="PW">PWG1127G-JM</option>
                 </select>
                 <button id="theme-toggle" title="Toggle Theme">
                     <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.64 5.64c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41zm12.73 12.73c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41zM5.64 18.36c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0zM18.36 5.64c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0z"/></svg>
-                    <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
-                    <path transform="scale(-1, 1) translate(-24, 0)" d="M9.5 2c-1.82 0-3.53.5-5 1.35 2.99 1.73 5 4.95 5 8.65s-2.01 6.92-5 8.65C6.47 21.5 8.18 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2z"/>
-                    </svg>
+                    <svg id="theme-icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;"><path transform="scale(-1, 1) translate(-24, 0)" d="M9.5 2c-1.82 0-3.53.5-5 1.35 2.99 1.73 5 4.95 5 8.65s-2.01 6.92-5 8.65C6.47 21.5 8.18 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2z"/></svg>
                 </button>
             </div>
         </header>
 
         <nav class="tab-nav">
             <button class="tab-button active" data-tab="pre-flight" style="--accent-color: #f7768e;">PRE-FLIGHT</button>
-            <button class="tab-button" data-tab="taxi-takeoff" style="--accent-color: #e0af68;">TAXI & T/O</button>
-            <button class="tab-button" data-tab="climb-cruise" style="--accent-color: #9ece6a;">CLIMB/CRUISE</button>
-            <button class="tab-button" data-tab="descent-approach" style="--accent-color: #7dcfff;">DES/APPR</button>
-            <button class="tab-button" data-tab="post-flight" style="--accent-color: #bb9af7;">POST-FLIGHT</button>
+            <button class="tab-button" data-tab="start-taxi" style="--accent-color: #e0af68;">START & TAXI</button>
+            <button class="tab-button" data-tab="takeoff-climb" style="--accent-color: #73daca;">T/O & CLIMB</button>
+            <button class="tab-button" data-tab="cruise-descent" style="--accent-color: #7dcfff;">CRUISE & DES</button>
+            <button class="tab-button" data-tab="approach-landing" style="--accent-color: #bb9af7;">APPR & LAND</button>
+            <button class="tab-button" data-tab="post-flight" style="--accent-color: #ff9e64;">POST-FLIGHT</button>
         </nav>
 
-        <main class="content-area">
-            <div id="pre-flight" class="checklist-section active">
-                <h2>Cockpit Preparation</h2>
-                <ul class="checklist">
-                    <li id="item-1"><span class="item-name">Gear Pins and Covers</span> <span class="item-status">REMOVED</span></li>
-                    <li id="item-2"><span class="item-name">Fuel Quantity</span> <span class="item-status">CHECKED</span></li>
-                    <li id="item-3"><span class="item-name">Batteries (check voltage > 25.5V)</span> <span class="item-status">AUTO</span></li>
-                    <li id="item-4"><span class="item-name">ADIRUs 1, 2, 3</span> <span class="item-status">NAV</span></li>
-                    <li id="item-5"><span class="item-name">Signs</span> <span class="item-status">ON/AUTO</span></li>
-                    <li id="item-6"><span class="item-name">BARO REF</span> <span class="item-status">SET (BOTH)</span></li>
-                </ul>
-                <h2>Before Start</h2>
-                <ul class="checklist">
-                    <li id="item-7"><span class="item-name">Parking Brake</span> <span class="item-status">ON</span></li>
-                    <li id="item-8"><span class="item-name">Windows & Doors</span> <span class="item-status">CLOSED</span></li>
-                    <li id="item-9"><span class="item-name">Beacon</span> <span class="item-status">ON</span></li>
-                    <li id="item-10"><span class="item-name">Fuel Pumps</span> <span class="item-status">ON</span></li>
-                    <li id="item-11"><span class="item-name">Thrust Levers</span> <span class="item-status">IDLE</span></li>
-                    <li id="item-12"><span class="item-name">APU MASTER SW & BLEED</span> <span class="item-status">ON</span></li>
-                </ul>
-            </div>
+        <div class="auto-advance-popup" id="auto-advance-popup">
+            <span class="auto-advance-popup-text">Page Complete! Click to advance.</span>
+            <button class="auto-advance-popup-dismiss" id="auto-advance-dismiss">&times;</button>
+        </div>
 
-            <div id="taxi-takeoff" class="checklist-section">
-                <h2>After Start</h2>
-                <ul class="checklist">
-                    <li id="item-13" class="pw-only"><span class="item-name">Dual Cooling (PW Engine)</span> <span class="item-status">ON</span></li>
-                    <li id="item-14"><span class="item-name">ENG MODE Selector</span> <span class="item-status">IGN/START</span></li>
-                    <li id="item-15"><span class="item-name">Engine Master 2 & 1</span> <span class="item-status">ON</span></li>
-                    <li id="item-16"><span class="item-name">APU BLEED & MASTER SW</span> <span class="item-status">OFF</span></li>
-                    <li id="item-17"><span class="item-name">Ground Spoilers</span> <span class="item-status">ARM</span></li>
-                    <li id="item-18"><span class="item-name">Pitch Trim & Rudder Trim</span> <span class="item-status">SET / ZERO</span></li>
-                    <li id="item-19"><span class="item-name">Flaps</span> <span class="item-status">SET FOR T/O</span></li>
-                    <li id="item-20"><span class="item-name">ECAM STATUS</span> <span class="item-status">CHECKED</span></li>
-                    <li id="item-21"><span class="item-name">Anti-Ice</span> <span class="item-status">AS REQ'D</span></li>
-                </ul>
-                <h2>Taxi</h2>
-                 <ul class="checklist">
-                    <li id="item-22"><span class="item-name">Flight Controls</span> <span class="item-status">CHECKED</span></li>
-                    <li id="item-23"><span class="item-name">Flap Setting</span> <span class="item-status">CONFIRM</span></li>
-                    <li id="item-24"><span class="item-name">ECAM MEMO (T.O.)</span> <span class="item-status">CHECK (NO BLUE)</span></li>
-                </ul>
-                <h2>Before Takeoff (Line-up)</h2>
-                <ul class="checklist">
-                    <li id="item-25"><span class="item-name">T.O Runway</span> <span class="item-status">CONFIRM</span></li>
-                    <li id="item-26"><span class="item-name">RADAR & PRED W/S</span> <span class="item-status">ON</span></li>
-                    <li id="item-27"><span class="item-name">Cabin Crew</span> <span class="item-status">ADVISED</span></li>
-                    <li id="item-28"><span class="item-name">TCAS</span> <span class="item-status">TA/RA</span></li>
-                    <li id="item-29"><span class="item-name">PACKS 1 & 2</span> <span class="item-status">AS REQ'D</span></li>
-                </ul>
-            </div>
-
-            <div id="climb-cruise" class="checklist-section">
-                <h2>After Takeoff / Climb</h2>
-                <ul class="checklist">
-                    <li id="item-30"><span class="item-name">Landing Gear</span> <span class="item-status">UP</span></li>
-                    <li id="item-31"><span class="item-name">Flaps</span> <span class="item-status">RETRACTED</span></li>
-                    <li id="item-32"><span class="item-name">Ground Spoilers</span> <span class="item-status">DISARMED</span></li>
-                    <li id="item-33"><span class="item-name">PACKS</span> <span class="item-status">ON</span></li>
-                    <li id="item-34"><span class="item-name">Exterior Lights</span> <span class="item-status">AS REQ'D</span></li>
-                    <li id="item-35"><span class="item-name">Seat Belts Sign</span> <span class="item-status">OFF</span></li>
-                </ul>
-                <h2>Cruise</h2>
-                <ul class="checklist">
-                    <li id="item-36"><span class="item-name">System Pages</span> <span class="item-status">MONITOR</span></li>
-                    <li id="item-37"><span class="item-name">Fuel Prediction</span> <span class="item-status">MONITOR</span></li>
-                </ul>
-            </div>
-
-            <div id="descent-approach" class="checklist-section">
-                <h2>Approach</h2>
-                <ul class="checklist">
-                    <li id="item-38"><span class="item-name">Descent Preparation</span> <span class="item-status">COMPLETE</span></li>
-                    <li id="item-39"><span class="item-name">BARO REF</span> <span class="item-status">SET (BOTH)</span></li>
-                    <li id="item-40"><span class="item-name">Seat Belts</span> <span class="item-status">ON</span></li>
-                    <li id="item-41"><span class="item-name">Minimums</span> <span class="item-status">SET (BOTH)</span></li>
-                    <li id="item-42"><span class="item-name">ENG MODE SEL</span> <span class="item-status">AS REQ'D</span></li>
-                    <li id="item-43"><span class="item-name">G/A Altitude</span> <span class="item-status">SET (BOTH)</span></li>
-                    <li id="item-44"><span class="item-name">Cabin Crew</span> <span class="item-status">ADVISED</span></li>
-                    <li id="item-45"><span class="item-name">ECAM MEMO (LDG)</span> <span class="item-status">CHECK (NO BLUE)</span></li>
-                </ul>
-            </div>
-
-            <div id="post-flight" class="checklist-section">
-                <h2>After Landing</h2>
-                <ul class="checklist">
-                    <li id="item-46"><span class="item-name">Spoilers</span> <span class="item-status">DISARMED</span></li>
-                    <li id="item-47"><span class="item-name">Flaps</span> <span class="item-status">RETRACTED</span></li>
-                    <li id="item-48"><span class="item-name">RADAR & PRED W/S</span> <span class="item-status">OFF</span></li>
-                    <li id="item-49"><span class="item-name">APU</span> <span class="item-status">AS REQ'D</span></li>
-                    <li id="item-50"><span class="item-name">Exterior Lights</span> <span class="item-status">AS REQ'D</span></li>
-                </ul>
-                 <h2>Parking</h2>
-                <ul class="checklist">
-                    <li id="item-51"><span class="item-name">Parking Brake or Chocks</span> <span class="item-status">SET</span></li>
-                    <li id="item-52"><span class="item-name">Engines</span> <span class="item-status">OFF</span></li>
-                    <li id="item-53"><span class="item-name">Beacon</span> <span class="item-status">OFF</span></li>
-                    <li id="item-54"><span class="item-name">Fuel Pumps</span> <span class="item-status">OFF</span></li>
-                </ul>
-                 <h2>Securing The Aircraft</h2>
-                <ul class="checklist">
-                    <li id="item-55"><span class="item-name">ADIRUs</span> <span class="item-status">OFF</span></li>
-                    <li id="item-56"><span class="item-name">EMER EXIT LT</span> <span class="item-status">OFF</span></li>
-                    <li id="item-57"><span class="item-name">Signs</span> <span class="item-status">OFF</span></li>
-                    <li id="item-58"><span class="item-name">Batteries 1 & 2</span> <span class="item-status">OFF</span></li>
-                </ul>
-            </div>
-        </main>
+        <main class="content-area" id="main-content-area">
+            </main>
 
         <footer>
-            <div class="footer-text">
-                &copy; 2025 Lucas Lee Jing Yi (WingsAcademy.sg)
-            </div>
+            <div class="footer-text">&copy; 2025 Lucas Lee Jing Yi (WingsAcademy.sg)</div>
             <div class="footer-buttons">
                 <button id="reset-current">Reset Current</button>
                 <button id="reset-all">Reset All</button>
             </div>
-            <div class="footer-text">
-                For Flight Simulation Use ONLY.
-            </div>
+            <div class="footer-text">For Flight Simulation Use ONLY.</div>
         </footer>
     </div>
 
@@ -514,14 +363,202 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const checklistItems = document.querySelectorAll('.checklist li');
+            const checklistData = {
+                "pre-flight": {
+                    "Cockpit Preparation": [
+                        { id: 'v-cp-1', name: 'Parking Brake', status: 'CHECK ON', mode: 'verbose' },
+                        { id: 'v-cp-2', name: 'Landing Gear Lever', status: 'CHECK DOWN', mode: 'verbose' },
+                        { id: 's-cp-1', name: 'Fuel Quantity', status: 'CHECK', mode: 'simplified' },
+                        { id: 's-cp-2', name: 'Batteries (> 25.5V)', status: 'AUTO', mode: 'simplified' },
+                        { id: 'v-cp-3', name: 'Batteries 1+2 (>25.5V)', status: 'AUTO', mode: 'verbose' },
+                        { id: 'v-cp-4', name: 'External Power', status: 'ON (IF AVAIL)', mode: 'verbose' },
+                        { id: 'v-cp-5', name: 'APU Fire Test', status: 'TEST, VERIFY', mode: 'verbose' },
+                        { id: 's-cp-3', name: 'APU Master & Start', status: 'ON', mode: 'simplified' },
+                        { id: 'v-cp-6', name: 'APU Master SW & Start', status: 'ON', mode: 'verbose' },
+                    ],
+                    "After APU Start": [
+                         { id: 'v-aas-1', name: 'APU Bleed', status: 'ON', mode: 'verbose' },
+                         { id: 'v-aas-2', name: 'Battery Charging', status: 'CHECK (ELEC PAGE)', mode: 'verbose' },
+                         { id: 'v-aas-3', name: 'Overhead Panel Scan', status: 'NO WHITE LIGHTS', mode: 'verbose' },
+                         { id: 's-aas-1', name: 'Overhead Panel Scan', status: 'NO WHITE LIGHTS', mode: 'simplified' },
+                    ],
+                    "Systems Setup": [
+                        { id: 's-ss-1', name: 'ADIRUs 1, 2, 3', status: 'NAV', mode: 'simplified' },
+                        { id: 'v-ss-1', name: 'ADIRUs 1, 3, then 2', status: 'ON / NAV', mode: 'verbose' },
+                        { id: 'v-ss-2', name: 'Crew Oxygen Supply', status: 'ON', mode: 'verbose' },
+                        { id: 'v-ss-3', name: 'EMER EXIT LT', status: 'ARM', mode: 'verbose' },
+                        { id: 's-ss-2', name: 'Signs', status: 'ON/AUTO', mode: 'simplified' },
+                        { id: 'v-ss-4', name: 'Signs (NO SMOKING/SEATBELT)', status: 'AUTO/ON', mode: 'verbose' },
+                        { id: 's-ss-3', name: 'BARO REF', status: 'SET (BOTH)', mode: 'simplified' },
+                        { id: 'v-ss-5', name: 'Altimeters (QNH)', status: 'SET (BOTH)', mode: 'verbose' },
+                        { id: 'v-ss-6', name: 'FMGS', status: 'SET & CHECKED', mode: 'verbose' },
+                    ],
+                    "Before Pushback": [
+                        { id: 's-bp-1', name: 'Windows & Doors', status: 'CLOSED', mode: 'simplified' },
+                        { id: 's-bp-2', name: 'Beacon', status: 'ON', mode: 'simplified' },
+                        { id: 'v-bp-1', name: 'Windows & Doors', status: 'CLOSED / CHECKED', mode: 'verbose' },
+                        { id: 'v-bp-2', name: 'Slides', status: 'ARMED', mode: 'verbose' },
+                        { id: 'v-bp-3', name: 'Beacon', status: 'ON', mode: 'verbose' },
+                        { id: 'v-bp-4', name: 'ENGINE Fire Test', status: 'TEST, VERIFY', mode: 'verbose' },
+                        { id: 'v-bp-5', name: 'Pushback Clearance', status: 'OBTAIN', mode: 'verbose' },
+                    ]
+                },
+                "start-taxi": {
+                    "Engine Start": [
+                        { id: 'v-es-1', name: 'Engine Area', status: 'CLEAR', mode: 'verbose'},
+                        { id: 's-es-2', name: 'ENG MODE Selector', status: 'IGN/START', mode: 'simplified'},
+                        { id: 'v-es-2', name: 'ENG MODE Selector', status: 'IGN/START', mode: 'verbose'},
+                        { id: 'v-es-3', class: 'pw-only', name: 'Dual Cooling (PW)', status: 'ON (AS REQ\'D)', mode: 'verbose'},
+                        { id: 'v-es-4', name: 'Engine Master 2 then 1', status: 'START', mode: 'verbose'},
+                        { id: 's-es-4', name: 'Engine Master 2 & 1', status: 'ON', mode: 'simplified'},
+                        { id: 'v-es-5', name: 'Monitor Start', status: '(N2, FF, EGT, OIL)', mode: 'verbose'},
+                    ],
+                    "After Start": [
+                        { id: 's-as-1', name: 'APU BLEED & MASTER', status: 'OFF', mode: 'simplified'},
+                        { id: 's-as-2', name: 'Ground Spoilers', status: 'ARM', mode: 'simplified'},
+                        { id: 's-as-3', name: 'Pitch & Rudder Trim', status: 'SET / ZERO', mode: 'simplified'},
+                        { id: 's-as-4', name: 'Flaps', status: 'SET FOR T/O', mode: 'simplified'},
+                        { id: 's-as-5', name: 'ECAM STATUS', status: 'CHECK', mode: 'simplified'},
+                        { id: 's-as-6', name: 'Anti-Ice', status: 'AS REQ\'D', mode: 'simplified'},
+                        { id: 'v-as-1', name: 'ENG MODE Selector', status: 'NORM', mode: 'verbose'},
+                        { id: 'v-as-2', class: 'pw-only', name: 'Dual Cooling (PW)', status: 'OFF', mode: 'verbose'},
+                        { id: 'v-as-3', name: 'APU Bleed', status: 'OFF', mode: 'verbose'},
+                        { id: 'v-as-4', name: 'Anti-Ice', status: 'AS REQ\'D', mode: 'verbose'},
+                        { id: 'v-as-5', name: 'APU MASTER SW', status: 'OFF (UNLESS REQ)', mode: 'verbose'},
+                        { id: 'v-as-6', name: 'Ground Spoilers', status: 'ARM', mode: 'verbose'},
+                        { id: 'v-as-7', name: 'Rudder Trim', status: 'RESET ZERO', mode: 'verbose'},
+                        { id: 'v-as-8', name: 'Flaps', status: 'SET T/O CONFIG', mode: 'verbose'},
+                        { id: 'v-as-9', name: 'Pitch Trim', status: 'SET T/O VALUE', mode: 'verbose'},
+                        { id: 'v-as-10', name: 'ECAM STATUS', status: 'CHECK', mode: 'verbose'},
+                    ],
+                    "Taxi": [
+                        { id: 's-tx-1', name: 'Flight Controls', status: 'CHECK', mode: 'simplified'},
+                        { id: 's-tx-2', name: 'Flap Setting', status: 'CONFIRM', mode: 'simplified'},
+                        { id: 's-tx-3', name: 'ECAM MEMO (T.O.)', status: 'CHECK (NO BLUE)', mode: 'simplified'},
+                        { id: 'v-tx-1', name: 'Nosewheel Light', status: 'TAXI', mode: 'verbose'},
+                        { id: 'v-tx-2', name: 'Parking Brake', status: 'RELEASE', mode: 'verbose'},
+                        { id: 'v-tx-3', name: 'Brake Check', status: 'PERFORM', mode: 'verbose'},
+                        { id: 'v-tx-4', name: 'Flight Controls', status: 'CHECK (F/CTL PAGE)', mode: 'verbose'},
+                        { id: 'v-tx-5', name: 'Autobrake', status: 'MAX', mode: 'verbose'},
+                        { id: 'v-tx-6', name: 'Takeoff Config Button', status: 'TEST (NO ALARM)', mode: 'verbose'},
+                        { id: 'v-tx-7', name: 'ECAM T.O. MEMO', status: 'CHECK (NO BLUE)', mode: 'verbose'},
+                    ]
+                },
+                "takeoff-climb": {
+                    "Before Takeoff (Line-up)": [
+                        { id: 's-bt-1', name: 'T.O Runway', status: 'CONFIRM', mode: 'simplified'},
+                        { id: 's-bt-2', name: 'RADAR & PWS', status: 'ON', mode: 'simplified'},
+                        { id: 's-bt-3', name: 'Cabin Crew', status: 'ADVISED', mode: 'simplified'},
+                        { id: 's-bt-4', name: 'TCAS', status: 'TA/RA', mode: 'simplified'},
+                        { id: 's-bt-5', name: 'PACKS 1 & 2', status: 'AS REQ\'D', mode: 'simplified'},
+                        { id: 'v-bt-1', name: 'Cabin Crew', status: 'ADVISE "SEATED"', mode: 'verbose'},
+                        { id: 'v-bt-2', name: 'Exterior Lights', status: 'SET FOR T/O', mode: 'verbose'},
+                        { id: 'v-bt-3', name: 'RADAR / PWS', status: 'ON / AUTO', mode: 'verbose'},
+                        { id: 'v-bt-4', name: 'TCAS', status: 'TA/RA', mode: 'verbose'},
+                        { id: 'v-bt-5', name: 'PACKS 1 & 2', status: 'AS REQ\'D', mode: 'verbose'},
+                    ],
+                    "After Takeoff / Climb": [
+                        { id: 's-ac-1', name: 'Landing Gear', status: 'UP', mode: 'simplified'},
+                        { id: 's-ac-2', name: 'Flaps', status: 'RETRACTED', mode: 'simplified'},
+                        { id: 's-ac-3', name: 'Ground Spoilers', status: 'DISARMED', mode: 'simplified'},
+                        { id: 's-ac-4', name: 'PACKS', status: 'ON', mode: 'simplified'},
+                        { id: 's-ac-5', name: 'Exterior Lights', status: 'AS REQ\'D', mode: 'simplified'},
+                        { id: 's-ac-6', name: 'Seat Belts Sign', status: 'OFF (PASSING 10000FT)', mode: 'simplified'},
+                        { id: 'v-ac-1', name: 'Landing Gear', status: 'UP', mode: 'verbose'},
+                        { id: 'v-ac-2', name: 'Thrust Levers', status: 'CLB', mode: 'verbose'},
+                        { id: 'v-ac-3', name: 'Flaps/Slats', status: 'RETRACT ON SCHED', mode: 'verbose'},
+                        { id: 'v-ac-4', name: 'Ground Spoilers', status: 'DISARM', mode: 'verbose'},
+                        { id: 'v-ac-5', name: 'PACKS', status: 'ON (IF OFF)', mode: 'verbose'},
+                        { id: 'v-ac-6', name: 'Transition Altitude', status: 'SET STD', mode: 'verbose'},
+                        { id: 'v-ac-7', name: 'Landing Lights (10k FT)', status: 'OFF & RETRACT', mode: 'verbose'},
+                        { id: 'v-ac-8', name: 'Seat Belts Sign (10k FT)', status: 'AS REQ\'D', mode: 'verbose'},
+                    ]
+                },
+                "cruise-descent": {
+                    "Cruise": [
+                        { id: 's-cr-1', name: 'System Pages', status: 'MONITOR', mode: 'simplified'},
+                        { id: 's-cr-2', name: 'Fuel Prediction', status: 'MONITOR', mode: 'simplified'},
+                        { id: 'v-cr-1', name: 'ECAM System Pages', status: 'MONITOR', mode: 'verbose'},
+                        { id: 'v-cr-2', name: 'MCDU PROG/F-PLN', status: 'MONITOR', mode: 'verbose'},
+                        { id: 'v-cr-3', name: 'Fuel', status: 'CHECK BALANCE/PRED', mode: 'verbose'},
+                    ],
+                    "Descent": [
+                        { id: 's-dp-1', name: 'Descent Prep', status: 'COMPLETE', mode: 'simplified' },
+                        { id: 'v-dp-1', name: 'ATIS/Weather', status: 'OBTAIN', mode: 'verbose' },
+                        { id: 'v-dp-2', name: 'MCDU PERF APPR Page', status: 'SET', mode: 'verbose' },
+                        { id: 'v-dp-3', name: 'MCDU F-PLN', status: 'CHECK/BRIEF', mode: 'verbose' },
+                        { id: 'v-dp-4', name: 'Auto Brake', status: 'SELECT', mode: 'verbose' },
+                        { id: 'v-dp-5', name: 'Briefing', status: 'CONFIRM', mode: 'verbose' },
+                        { id: 'v-dp-6', name: 'Seat Belts (10k FT)', status: 'ON', mode: 'verbose' },
+                        { id: 'v-dp-7', name: 'Landing Lights (10k FT)', status: 'ON', mode: 'verbose' },
+                        { id: 'v-dp-8', name: 'Transition Level', status: 'SET QNH', mode: 'verbose' },
+                    ]
+                },
+                "approach-landing": {
+                    "Approach": [
+                         { id: 's-ap-1', name: 'Seat Belts', status: 'ON', mode: 'simplified' },
+                         { id: 's-ap-2', name: 'Minimums', status: 'SET', mode: 'simplified' },
+                         { id: 's-ap-3', name: 'G/A Altitude', status: 'SET', mode: 'simplified' },
+                         { id: 's-ap-4', name: 'Cabin Crew', status: 'ADVISED', mode: 'simplified' },
+                         { id: 's-ap-5', name: 'ECAM MEMO (LDG)', status: 'CHECK (NO BLUE)', mode: 'simplified' },
+                         { id: 'v-ap-1', name: 'MCDU PERF Page', status: 'ACTIVATE APPR PHASE', mode: 'verbose' },
+                         { id: 'v-ap-2', name: 'Flaps/Slats', status: 'EXTEND ON SCHED', mode: 'verbose' },
+                         { id: 'v-ap-3', name: 'Landing Gear', status: 'DOWN', mode: 'verbose' },
+                         { id: 'v-ap-4', name: 'Ground Spoilers', status: 'ARM', mode: 'verbose' },
+                         { id: 'v-ap-5', name: 'Exterior Lights', status: 'ON', mode: 'verbose' },
+                         { id: 'v-ap-6', name: 'ECAM WHEEL Page', status: 'CHECK 3 GREEN', mode: 'verbose' },
+                         { id: 'v-ap-7', name: 'ECAM LDG MEMO', status: 'CHECK NO BLUE', mode: 'verbose' },
+                    ]
+                },
+                "post-flight": {
+                    "After Landing": [
+                         { id: 's-al-1', name: 'Spoilers', status: 'DISARM', mode: 'simplified'},
+                         { id: 's-al-2', name: 'Flaps', status: 'RETRACT', mode: 'simplified'},
+                         { id: 's-al-3', name: 'RADAR & PWS', status: 'OFF', mode: 'simplified'},
+                         { id: 's-al-4', name: 'APU', status: 'AS REQ\'D', mode: 'simplified'},
+                         { id: 's-al-5', name: 'Exterior Lights', status: 'AS REQ\'D', mode: 'simplified'},
+                         { id: 'v-al-1', name: 'Spoilers', status: 'RETRACT & DISARM', mode: 'verbose'},
+                         { id: 'v-al-2', name: 'Flaps', status: 'RETRACT', mode: 'verbose'},
+                         { id: 'v-al-3', name: 'APU', status: 'START (IF REQ)', mode: 'verbose'},
+                         { id: 'v-al-4', name: 'RADAR & PWS', status: 'OFF', mode: 'verbose'},
+                         { id: 'v-al-5', name: 'Strobe Lights', status: 'AUTO', mode: 'verbose'},
+                         { id: 'v-al-6', name: 'TCAS', status: 'STBY', mode: 'verbose'},
+                    ],
+                    "Parking": [
+                         { id: 's-pk-1', name: 'Parking Brake/Chocks', status: 'SET', mode: 'simplified'},
+                         { id: 's-pk-2', name: 'Engines', status: 'OFF', mode: 'simplified'},
+                         { id: 's-pk-3', name: 'Beacon', status: 'OFF', mode: 'simplified'},
+                         { id: 's-pk-4', name: 'Fuel Pumps', status: 'OFF', mode: 'simplified'},
+                         { id: 'v-pk-1', name: 'Parking Brake', status: 'ON', mode: 'verbose'},
+                         { id: 'v-pk-2', name: 'APU Bleed', status: 'ON (IF APU AVAIL)', mode: 'verbose'},
+                         { id: 'v-pk-3', name: 'Engines 1 & 2', status: 'OFF', mode: 'verbose'},
+                         { id: 'v-pk-4', name: 'Beacon', status: 'OFF (ENG SPOOLED)', mode: 'verbose'},
+                         { id: 'v-pk-5', name: 'Seat Belts Sign', status: 'OFF', mode: 'verbose'},
+                         { id: 'v-pk-6', name: 'Fuel Pumps', status: 'OFF', mode: 'verbose'},
+                    ],
+                    "Securing The Aircraft": [
+                        { id: 's-sc-1', name: 'ADIRUs', status: 'OFF', mode: 'simplified'},
+                        { id: 's-sc-2', name: 'EMER EXIT LT', status: 'OFF', mode: 'simplified'},
+                        { id: 's-sc-3', name: 'Signs', status: 'OFF', mode: 'simplified'},
+                        { id: 's-sc-4', name: 'Batteries 1 & 2', status: 'OFF', mode: 'simplified'},
+                        { id: 'v-sc-1', name: 'ADIRUs 1, 3, 2', status: 'OFF', mode: 'verbose'},
+                        { id: 'v-sc-2', name: 'EMER EXIT LT', status: 'OFF', mode: 'verbose'},
+                        { id: 'v-sc-3', name: 'APU Bleed & Master', status: 'OFF', mode: 'verbose'},
+                        { id: 'v-sc-4', name: 'External Power', status: 'OFF', mode: 'verbose'},
+                        { id: 'v-sc-5', name: 'Batteries 1 & 2', status: 'OFF', mode: 'verbose'},
+                    ]
+                }
+            };
+
+            // --- UI & STATE MANAGEMENT ---
+            const mainContentArea = document.getElementById('main-content-area');
             const tabButtons = document.querySelectorAll('.tab-button');
-            const checklistSections = document.querySelectorAll('.checklist-section');
             const resetAllButton = document.getElementById('reset-all');
             const resetCurrentButton = document.getElementById('reset-current');
             const themeToggleButton = document.getElementById('theme-toggle');
             const themeIconSun = document.getElementById('theme-icon-sun');
             const themeIconMoon = document.getElementById('theme-icon-moon');
+            const modeToggle = document.getElementById('mode-toggle');
             const engineSelect = document.getElementById('engine-select');
             const container = document.querySelector('.container');
             const body = document.body;
@@ -529,44 +566,105 @@
             const modalText = document.getElementById('modal-text');
             const modalConfirm = document.getElementById('modal-confirm');
             const modalCancel = document.getElementById('modal-cancel');
+            const advancePopup = document.getElementById('auto-advance-popup');
+            const advancePopupDismiss = document.getElementById('auto-advance-dismiss');
 
-            const checklistStateKey = 'tolissA320ChecklistState_v4';
-            const themeKey = 'tolissA320Theme_v2';
-            const engineKey = 'tolissA320Engine_v2';
+            const stateKeys = {
+                checklist: 'tolissA320ChecklistState_v8',
+                theme: 'tolissA320Theme_v2',
+                engine: 'tolissA320Engine_v2',
+                mode: 'tolissA320Mode_v2'
+            };
 
             const loadState = (key, defaultValue) => {
                 const item = localStorage.getItem(key);
                 try {
                     return item ? JSON.parse(item) : defaultValue;
-                } catch (e) {
-                    return defaultValue;
-                }
+                } catch (e) { return defaultValue; }
             };
+
             const saveState = (key, state) => localStorage.setItem(key, JSON.stringify(state));
 
-            let checklistState = loadState(checklistStateKey, {});
-            const savedTheme = loadState(themeKey, 'dark-theme');
-            const savedEngine = loadState(engineKey, 'CFM');
+            let checklistState = loadState(stateKeys.checklist, {});
+
+            const checkPageCompletion = () => {
+                const currentMode = body.classList.contains('verbose-mode') ? 'verbose' : 'simplified';
+                const itemsOnPage = mainContentArea.querySelectorAll(`.checklist-item[data-mode="${currentMode}"], .checklist-item[data-mode="all"]`);
+
+                const visibleItems = Array.from(itemsOnPage).filter(item => item.offsetParent !== null);
+
+                const allChecked = visibleItems.length > 0 && visibleItems.every(item => item.classList.contains('checked'));
+
+                advancePopup.classList.toggle('show', allChecked);
+            };
+
+            const renderChecklists = () => {
+                const activeTabId = document.querySelector('.tab-button.active').dataset.tab;
+                const checklistGroups = checklistData[activeTabId];
+                if (!checklistGroups) return;
+
+                mainContentArea.innerHTML = '';
+                let sectionHTML = '';
+
+                for (const groupName in checklistGroups) {
+                    sectionHTML += `<div class="checklist-group"><h2>${groupName}</h2><ul class="checklist">`;
+                    checklistGroups[groupName].forEach(item => {
+                        const isChecked = !!checklistState[item.id];
+                        const checkedClass = isChecked ? 'checked' : '';
+
+                        let combinedClasses = `checklist-item ${item.mode}-item ${checkedClass}`;
+                        if (item.class === 'pw-only') {
+                            combinedClasses += ' pw-only';
+                        }
+
+                        sectionHTML += `
+                            <li id="${item.id}" data-mode="${item.mode}" class="${combinedClasses}">
+                                <span class="item-name">${item.name}</span>
+                                <span class="item-status">${item.status}</span>
+                            </li>
+                        `;
+                    });
+                    sectionHTML += `</ul></div>`;
+                }
+
+                mainContentArea.innerHTML = sectionHTML;
+
+                mainContentArea.querySelectorAll('.checklist-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.currentTarget.classList.toggle('checked');
+                        checklistState[e.currentTarget.id] = e.currentTarget.classList.contains('checked');
+                        saveState(stateKeys.checklist, checklistState);
+                        checkPageCompletion();
+                    });
+                });
+
+                applyEngineConfig(engineSelect.value);
+                setTimeout(checkPageCompletion, 50);
+            };
 
             const applyTheme = (theme) => {
-                body.className = theme;
+                body.classList.remove('light-theme', 'dark-theme');
+                body.classList.add(theme);
                 const isDark = theme === 'dark-theme';
                 themeIconSun.style.display = isDark ? 'none' : 'block';
                 themeIconMoon.style.display = isDark ? 'block' : 'none';
-                saveState(themeKey, theme);
+                saveState(stateKeys.theme, theme);
+            };
+
+            const applyMode = (mode) => {
+                body.classList.remove('simplified-mode', 'verbose-mode');
+                body.classList.add(mode);
+                modeToggle.checked = mode === 'verbose-mode';
+                saveState(stateKeys.mode, mode);
+                renderChecklists();
             };
 
             const applyEngineConfig = (engine) => {
                 document.querySelectorAll('.pw-only').forEach(el => {
                     el.style.display = (engine === 'PW') ? 'flex' : 'none';
                 });
-                saveState(engineKey, engine);
-            };
-
-            const updateChecklistUI = () => {
-                checklistItems.forEach(item => {
-                    item.classList.toggle('checked', !!checklistState[item.id]);
-                });
+                saveState(stateKeys.engine, engine);
+                checkPageCompletion();
             };
 
             const switchTab = (targetTabId) => {
@@ -576,17 +674,22 @@
                 container.style.setProperty('--accent-color', accentColor);
                 tabButtons.forEach(button => button.classList.remove('active'));
                 activeTabButton.classList.add('active');
-                checklistSections.forEach(section => section.classList.remove('active'));
-                document.getElementById(targetTabId).classList.add('active');
+
+                renderChecklists();
+            };
+
+            const advanceToNextTab = () => {
+                const currentActive = document.querySelector('.tab-button.active');
+                const currentIndex = Array.from(tabButtons).indexOf(currentActive);
+                const nextIndex = (currentIndex + 1) % tabButtons.length;
+                tabButtons[nextIndex].click();
             };
 
             let resolveConfirm;
             const showConfirm = (message) => {
                 modalText.textContent = message;
                 modal.style.display = 'flex';
-                return new Promise((resolve) => {
-                    resolveConfirm = resolve;
-                });
+                return new Promise((resolve) => { resolveConfirm = resolve; });
             };
 
             modalConfirm.addEventListener('click', () => {
@@ -599,59 +702,64 @@
                 if (resolveConfirm) resolveConfirm(false);
             });
 
-            applyTheme(savedTheme);
-            engineSelect.value = savedEngine;
-            applyEngineConfig(savedEngine);
-            updateChecklistUI();
-            switchTab('pre-flight');
+            advancePopup.addEventListener('click', advanceToNextTab);
+            advancePopupDismiss.addEventListener('click', (e) => {
+                e.stopPropagation();
+                advancePopup.classList.remove('show');
+            });
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => switchTab(button.dataset.tab));
             });
 
-            checklistItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    item.classList.toggle('checked');
-                    checklistState[item.id] = item.classList.contains('checked');
-                    saveState(checklistStateKey, checklistState);
-                });
-            });
-
             themeToggleButton.addEventListener('click', () => {
-                applyTheme(body.classList.contains('dark-theme') ? 'light-theme' : 'dark-theme');
+                const newTheme = body.classList.contains('dark-theme') ? 'light-theme' : 'dark-theme';
+                applyTheme(newTheme);
             });
 
-            engineSelect.addEventListener('change', (e) => {
-                applyEngineConfig(e.target.value);
+            modeToggle.addEventListener('change', () => {
+                const newMode = modeToggle.checked ? 'verbose-mode' : 'simplified-mode';
+                applyMode(newMode);
             });
+
+            engineSelect.addEventListener('change', (e) => applyEngineConfig(e.target.value));
 
             resetAllButton.addEventListener('click', async () => {
                 const confirmed = await showConfirm('Are you sure you want to reset ALL checklist items across all tabs?');
                 if (confirmed) {
                     checklistState = {};
-                    saveState(checklistStateKey, checklistState);
-                    updateChecklistUI();
+                    saveState(stateKeys.checklist, checklistState);
+                    renderChecklists();
                 }
             });
 
             resetCurrentButton.addEventListener('click', async () => {
-                const activeSection = document.querySelector('.checklist-section.active');
+                const activeTabId = document.querySelector('.tab-button.active').dataset.tab;
                 const activeTabButton = document.querySelector('.tab-button.active');
                 const tabName = activeTabButton ? activeTabButton.textContent : 'current tab';
 
-                if (activeSection) {
-                    const confirmed = await showConfirm(`Are you sure you want to reset the checklist for the ${tabName} tab?`);
-                    if(confirmed) {
-                        activeSection.querySelectorAll('.checklist li').forEach(item => {
+                const confirmed = await showConfirm(`Are you sure you want to reset the checklist for the ${tabName} tab?`);
+                if(confirmed) {
+                    const checklistGroups = checklistData[activeTabId];
+                    for (const groupName in checklistGroups) {
+                        checklistGroups[groupName].forEach(item => {
                             delete checklistState[item.id];
                         });
-                        saveState(checklistStateKey, checklistState);
-                        updateChecklistUI();
                     }
+                    saveState(stateKeys.checklist, checklistState);
+                    renderChecklists();
                 }
             });
+
+            const savedTheme = loadState(stateKeys.theme, 'dark-theme');
+            const savedEngine = loadState(stateKeys.engine, 'CFM');
+            const savedMode = loadState(stateKeys.mode, 'simplified-mode');
+
+            applyTheme(savedTheme);
+            engineSelect.value = savedEngine;
+            applyMode(savedMode);
+            switchTab('pre-flight');
         });
     </script>
-
 </body>
 </html>
