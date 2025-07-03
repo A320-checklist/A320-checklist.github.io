@@ -56,7 +56,7 @@
 
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1600px;
             height: 95vh;
             max-height: 1200px;
             margin: 1rem;
@@ -316,7 +316,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const checklistData = {
                 "pre-flight": {
-                    "Cockpit Preparation": [
+                    "1. Cockpit Preparation": [
                         { id: 'v-cp-1', name: 'Parking Brake', status: 'CHECK ON', mode: 'verbose' },
                         { id: 'v-cp-2', name: 'Landing Gear Lever', status: 'CHECK DOWN', mode: 'verbose' },
                         { id: 's-cp-1', name: 'Fuel Quantity', status: 'CHECK', mode: 'simplified' },
@@ -327,13 +327,13 @@
                         { id: 's-cp-3', name: 'APU Master & Start', status: 'ON', mode: 'simplified' },
                         { id: 'v-cp-6', name: 'APU Master SW & Start', status: 'ON', mode: 'verbose' },
                     ],
-                    "After APU Start": [
+                    "2. After APU Start": [
                          { id: 'v-aas-1', name: 'APU Bleed', status: 'ON', mode: 'verbose' },
                          { id: 'v-aas-2', name: 'Battery Charging', status: 'CHECK (ELEC PAGE)', mode: 'verbose' },
                          { id: 'v-aas-3', name: 'Overhead Panel Scan', status: 'NO WHITE LIGHTS', mode: 'verbose' },
                          { id: 's-aas-1', name: 'Overhead Panel Scan', status: 'NO WHITE LIGHTS', mode: 'simplified' },
                     ],
-                    "Systems Setup": [
+                    "3. Systems Setup": [
                         { id: 's-ss-1', name: 'ADIRUs 1, 2, 3', status: 'NAV', mode: 'simplified' },
                         { id: 'v-ss-1', name: 'ADIRUs 1, 3, then 2', status: 'ON / NAV', mode: 'verbose' },
                         { id: 'v-ss-2', name: 'Crew Oxygen Supply', status: 'ON', mode: 'verbose' },
@@ -344,7 +344,7 @@
                         { id: 'v-ss-5', name: 'Altimeters (QNH)', status: 'SET (BOTH)', mode: 'verbose' },
                         { id: 'v-ss-6', name: 'FMGS', status: 'SET & CHECKED', mode: 'verbose' },
                     ],
-                    "Before Pushback": [
+                    "4. Before Pushback": [
                         { id: 's-bp-1', name: 'Windows & Doors', status: 'CLOSED', mode: 'simplified' },
                         { id: 's-bp-2', name: 'Beacon', status: 'ON', mode: 'simplified' },
                         { id: 'v-bp-1', name: 'Windows & Doors', status: 'CLOSED / CHECKED', mode: 'verbose' },
@@ -355,7 +355,7 @@
                     ]
                 },
                 "start-taxi": {
-                    "Engine Start": [
+                    "1. Engine Start": [
                         { id: 'v-es-1', name: 'Engine Area', status: 'CLEAR', mode: 'verbose'},
                         { id: 's-es-2', name: 'ENG MODE Selector', status: 'IGN/START', mode: 'simplified'},
                         { id: 'v-es-2', name: 'ENG MODE Selector', status: 'IGN/START', mode: 'verbose'},
@@ -364,7 +364,7 @@
                         { id: 's-es-4', name: 'Engine Master 2 & 1', status: 'ON', mode: 'simplified'},
                         { id: 'v-es-5', name: 'Monitor Start', status: '(N2, FF, EGT, OIL)', mode: 'verbose'},
                     ],
-                    "After Start": [
+                    "2. After Start": [
                         { id: 's-as-1', name: 'APU BLEED & MASTER', status: 'OFF', mode: 'simplified'},
                         { id: 's-as-2', name: 'Ground Spoilers', status: 'ARM', mode: 'simplified'},
                         { id: 's-as-3', name: 'Pitch & Rudder Trim', status: 'SET / ZERO', mode: 'simplified'},
@@ -382,7 +382,7 @@
                         { id: 'v-as-9', name: 'Pitch Trim', status: 'SET T/O VALUE', mode: 'verbose'},
                         { id: 'v-as-10', name: 'ECAM STATUS', status: 'CHECK', mode: 'verbose'},
                     ],
-                    "Taxi": [
+                    "3. Taxi": [
                         { id: 's-tx-1', name: 'Flight Controls', status: 'CHECK', mode: 'simplified'},
                         { id: 's-tx-2', name: 'Flap Setting', status: 'CONFIRM', mode: 'simplified'},
                         { id: 's-tx-3', name: 'ECAM MEMO (T.O.)', status: 'CHECK (NO BLUE)', mode: 'simplified'},
@@ -396,7 +396,7 @@
                     ]
                 },
                 "takeoff-climb": {
-                    "Before Takeoff (Line-up)": [
+                    "1. Before Takeoff (Line-up)": [
                         { id: 's-bt-1', name: 'T.O Runway', status: 'CONFIRM', mode: 'simplified'},
                         { id: 's-bt-2', name: 'RADAR & PWS', status: 'ON', mode: 'simplified'},
                         { id: 's-bt-3', name: 'Cabin Crew', status: 'ADVISED', mode: 'simplified'},
@@ -408,7 +408,7 @@
                         { id: 'v-bt-4', name: 'TCAS', status: 'TA/RA', mode: 'verbose'},
                         { id: 'v-bt-5', name: 'PACKS 1 & 2', status: 'AS REQ\'D', mode: 'verbose'},
                     ],
-                    "After Takeoff / Climb": [
+                    "2. After Takeoff / Climb": [
                         { id: 's-ac-1', name: 'Landing Gear', status: 'UP', mode: 'simplified'},
                         { id: 's-ac-2', name: 'Flaps', status: 'RETRACTED', mode: 'simplified'},
                         { id: 's-ac-3', name: 'Ground Spoilers', status: 'DISARMED', mode: 'simplified'},
@@ -426,14 +426,14 @@
                     ]
                 },
                 "cruise-descent": {
-                    "Cruise": [
+                    "1. Cruise": [
                         { id: 's-cr-1', name: 'System Pages', status: 'MONITOR', mode: 'simplified'},
                         { id: 's-cr-2', name: 'Fuel Prediction', status: 'MONITOR', mode: 'simplified'},
                         { id: 'v-cr-1', name: 'ECAM System Pages', status: 'MONITOR', mode: 'verbose'},
                         { id: 'v-cr-2', name: 'MCDU PROG/F-PLN', status: 'MONITOR', mode: 'verbose'},
                         { id: 'v-cr-3', name: 'Fuel', status: 'CHECK BALANCE/PRED', mode: 'verbose'},
                     ],
-                    "Descent": [
+                    "2. Descent": [
                         { id: 's-dp-1', name: 'Descent Prep', status: 'COMPLETE', mode: 'simplified' },
                         { id: 'v-dp-1', name: 'ATIS/Weather', status: 'OBTAIN', mode: 'verbose' },
                         { id: 'v-dp-2', name: 'MCDU PERF APPR Page', status: 'SET', mode: 'verbose' },
@@ -446,7 +446,7 @@
                     ]
                 },
                 "approach-landing": {
-                    "Approach": [
+                    "1. Approach": [
                          { id: 's-ap-1', name: 'Minimums', status: 'SET', mode: 'simplified' },
                          { id: 's-ap-2', name: 'MCDU PERF Page', status: 'ACTIVATE APPR PHASE', mode: 'simplified' },
                          { id: 's-ap-3', name: 'FCU APPR MODE', status: 'SET', mode: 'simplified' },
@@ -459,7 +459,7 @@
                          { id: 'v-ap-5', name: 'Ground Spoilers', status: 'ARM', mode: 'verbose' },
                          { id: 'v-ap-6', name: 'Exterior Lights', status: 'ON', mode: 'verbose' },
                     ],
-                    "Landing": [
+                    "2. Landing": [
                          { id: 's-ld-1', name: 'SIGNS', status: 'ON', mode: 'simplified' },
                          { id: 's-ld-2', name: 'G/A Altitude', status: 'SET', mode: 'simplified' },
                          { id: 's-ld-3', name: 'Cabin Crew', status: 'ADVISED', mode: 'simplified' },
@@ -477,7 +477,7 @@
                     ]
                 },
                 "post-flight": {
-                    "After Landing": [
+                    "1. After Landing": [
                          { id: 's-al-1', name: 'Spoilers', status: 'DISARM', mode: 'simplified'},
                          { id: 's-al-2', name: 'Flaps', status: 'RETRACT', mode: 'simplified'},
                          { id: 's-al-3', name: 'RADAR & PWS', status: 'OFF', mode: 'simplified'},
@@ -490,7 +490,7 @@
                          { id: 'v-al-5', name: 'Strobe Lights', status: 'AUTO', mode: 'verbose'},
                          { id: 'v-al-6', name: 'TCAS', status: 'STBY', mode: 'verbose'},
                     ],
-                    "Parking": [
+                    "2. Parking": [
                          { id: 's-pk-1', name: 'Parking Brake/Chocks', status: 'SET', mode: 'simplified'},
                          { id: 's-pk-2', name: 'Engines', status: 'OFF', mode: 'simplified'},
                          { id: 's-pk-3', name: 'Beacon', status: 'OFF', mode: 'simplified'},
@@ -502,7 +502,7 @@
                          { id: 'v-pk-5', name: 'Seat Belts Sign', status: 'OFF', mode: 'verbose'},
                          { id: 'v-pk-6', name: 'Fuel Pumps', status: 'OFF', mode: 'verbose'},
                     ],
-                    "Securing The Aircraft": [
+                    "3. Securing The Aircraft": [
                         { id: 's-sc-1', name: 'ADIRUs', status: 'OFF', mode: 'simplified'},
                         { id: 's-sc-2', name: 'EMER EXIT LT', status: 'OFF', mode: 'simplified'},
                         { id: 's-sc-3', name: 'Signs', status: 'OFF', mode: 'simplified'},
