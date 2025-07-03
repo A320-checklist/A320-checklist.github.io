@@ -79,10 +79,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap; /* Allow wrapping for mobile */
+            gap: 0.5rem;
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
-        .header-title { display: flex; align-items: center; gap: 1rem; }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-grow: 1; /* Allow title to take space */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2em;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
 
         .logo-placeholder {
             width: 100px;
@@ -100,50 +114,29 @@
         }
 
         .logo-placeholder span {
-             display: none;
+            display: none;
         }
 
-        header h1 { margin: 0; font-size: 1.2em; color: var(--text-primary); font-weight: 500; }
         .header-controls { display: flex; align-items: center; gap: 1rem; }
         .toggle-switch { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85em; color: var(--text-secondary); }
         .toggle-switch input { height: 0; width: 0; visibility: hidden; }
 
         .toggle-switch label {
-            cursor: pointer;
-            text-indent: -9999px;
-            width: 40px;
-            height: 20px;
-            background: var(--surface-color);
-            display: block;
-            border-radius: 100px;
-            position: relative;
-            border: 1px solid var(--border-color);
+            cursor: pointer; text-indent: -9999px; width: 40px; height: 20px; background: var(--surface-color);
+            display: block; border-radius: 100px; position: relative; border: 1px solid var(--border-color);
         }
 
         .toggle-switch label:after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 16px;
-            height: 16px;
-            background: var(--text-muted);
-            border-radius: 16px;
-            transition: 0.3s;
+            content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+            background: var(--text-muted); border-radius: 16px; transition: 0.3s;
         }
 
         .toggle-switch input:checked + label { background: var(--accent-color); }
         .toggle-switch input:checked + label:after { background: #fff; left: calc(100% - 2px); transform: translateX(-100%); }
 
         .header-controls select, .header-controls button {
-            background-color: var(--surface-color);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 0.4rem 0.8rem;
-            font-family: var(--font-main);
-            font-size: 0.9em;
-            cursor: pointer;
+            background-color: var(--surface-color); color: var(--text-secondary); border: 1px solid var(--border-color);
+            border-radius: 6px; padding: 0.4rem 0.8rem; font-family: var(--font-main); font-size: 0.9em; cursor: pointer;
         }
 
         #theme-toggle { background: none; border: none; cursor: pointer; padding: 0.4rem; display: flex; align-items: center; justify-content: center; }
@@ -151,87 +144,45 @@
         #theme-toggle:hover svg { fill: var(--text-primary); }
 
         .tab-nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: var(--card-color);
-            padding: 0.5rem;
-            flex-shrink: 0;
-            border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-around; background-color: var(--card-color);
+            padding: 0.5rem; flex-shrink: 0; border-bottom: 1px solid var(--border-color);
             transition: background-color var(--transition-speed), border-color var(--transition-speed);
         }
 
         .tab-nav button {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            padding: 0.75rem 0.5rem;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 700;
-            flex-grow: 1;
-            transition: all 0.2s ease;
-            border-radius: 6px;
-            border-bottom: 3px solid transparent;
+            background: none; border: none; color: var(--text-secondary); padding: 0.75rem 0.5rem;
+            cursor: pointer; font-size: 0.9em; font-weight: 700; flex-grow: 1; transition: all 0.2s ease;
+            border-radius: 6px; border-bottom: 3px solid transparent;
         }
 
         .tab-nav button:hover { background-color: var(--border-color); color: var(--text-primary); }
         .tab-nav button.active { color: var(--accent-color); border-bottom-color: var(--accent-color); }
 
         .auto-advance-popup {
-            position: absolute;
-            top: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--success-color);
-            color: var(--bg-color);
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: none;
-            align-items: center;
-            gap: 1.5rem;
-            z-index: 100;
-            cursor: pointer;
-            animation: slideDown 0.5s ease-out forwards;
+            position: absolute; top: 120px; left: 50%; transform: translateX(-50%); background-color: var(--success-color);
+            color: var(--bg-color); padding: 0.8rem 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none; align-items: center; gap: 1.5rem; z-index: 100; cursor: pointer; animation: slideDown 0.5s ease-out forwards;
         }
 
-        .auto-advance-popup.show {
-            display: flex;
-        }
+        .auto-advance-popup.show { display: flex; }
 
-        @keyframes slideDown {
-            from { top: 90px; opacity: 0; }
-            to { top: 120px; opacity: 1; }
-        }
+        @keyframes slideDown { from { top: 90px; opacity: 0; } to { top: 120px; opacity: 1; } }
 
-        .auto-advance-popup-text {
-            font-weight: 500;
-        }
-
-        .auto-advance-popup-dismiss {
-            background: none;
-            border: none;
-            color: var(--bg-color);
-            font-size: 1.5em;
-            cursor: pointer;
-            padding: 0 0.5rem;
-            line-height: 1;
-        }
+        .auto-advance-popup-text { font-weight: 500; }
+        .auto-advance-popup-dismiss { background: none; border: none; color: var(--bg-color); font-size: 1.5em; cursor: pointer; padding: 0 0.5rem; line-height: 1; }
 
         .content-area {
-            padding: 1.5rem;
-            overflow-y: auto;
-            flex-grow: 1;
+            padding: 1.5rem; overflow-y: auto; flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-auto-flow: row;
+            gap: 0 2rem; /* Row gap 0, column gap 2rem */
+            align-content: start;
         }
 
         .checklist-group h2 {
-            font-size: 1.4em;
-            color: var(--accent-color);
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.75rem;
-            margin: 0 0 1.5rem 0;
-            font-weight: 500;
-            transition: color var(--transition-speed);
+            font-size: 1.4em; color: var(--accent-color); border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem; margin: 0 0 1.5rem 0; font-weight: 500; transition: color var(--transition-speed);
         }
 
         .checklist-group:not(:first-child) h2 { margin-top: 2rem; }
@@ -282,16 +233,16 @@
         #modal-cancel { background-color: var(--surface-color); color: var(--text-secondary); }
 
         @media (max-width: 768px) {
+            header { justify-content: center; }
+            .header-title { flex-basis: 100%; justify-content: center; order: 2; margin-top: 0.5rem; }
+            .header-controls { flex-basis: 100%; justify-content: center; order: 1; }
+            .content-area { display: block; } /* Revert to single column on mobile */
             body { padding: 0; }
             .container { height: 100vh; margin: 0; border-radius: 0; }
-            .header-title { gap: 0.5rem; }
-            header h1 { font-size: 1.0em; }
-            .toggle-switch span { display: none; }
-            .header-controls { gap: 0.5rem; }
             .tab-nav { flex-wrap: wrap; }
             .tab-nav button { font-size: 0.8em; padding: 0.6rem 0.4rem; flex-basis: 30%; }
-            .auto-advance-popup { top: 155px; width: 90%; }
-            @keyframes slideDown { from { top: 125px; opacity: 0; } to { top: 155px; opacity: 1; } }
+            .auto-advance-popup { top: 180px; width: 90%; }
+            @keyframes slideDown { from { top: 150px; opacity: 0; } to { top: 180px; opacity: 1; } }
             .content-area { padding: 1rem; }
             .checklist-group h2 { font-size: 1.2em; }
             footer { flex-direction: column; gap: 0.5rem; padding: 0.75rem; }
@@ -496,18 +447,33 @@
                 },
                 "approach-landing": {
                     "Approach": [
-                         { id: 's-ap-1', name: 'Seat Belts', status: 'ON', mode: 'simplified' },
-                         { id: 's-ap-2', name: 'Minimums', status: 'SET', mode: 'simplified' },
-                         { id: 's-ap-3', name: 'G/A Altitude', status: 'SET', mode: 'simplified' },
-                         { id: 's-ap-4', name: 'Cabin Crew', status: 'ADVISED', mode: 'simplified' },
-                         { id: 's-ap-5', name: 'ECAM MEMO (LDG)', status: 'CHECK (NO BLUE)', mode: 'simplified' },
-                         { id: 'v-ap-1', name: 'MCDU PERF Page', status: 'ACTIVATE APPR PHASE', mode: 'verbose' },
-                         { id: 'v-ap-2', name: 'Flaps/Slats', status: 'EXTEND ON SCHED', mode: 'verbose' },
-                         { id: 'v-ap-3', name: 'Landing Gear', status: 'DOWN', mode: 'verbose' },
-                         { id: 'v-ap-4', name: 'Ground Spoilers', status: 'ARM', mode: 'verbose' },
-                         { id: 'v-ap-5', name: 'Exterior Lights', status: 'ON', mode: 'verbose' },
-                         { id: 'v-ap-6', name: 'ECAM WHEEL Page', status: 'CHECK 3 GREEN', mode: 'verbose' },
-                         { id: 'v-ap-7', name: 'ECAM LDG MEMO', status: 'CHECK NO BLUE', mode: 'verbose' },
+                         { id: 's-ap-1', name: 'Minimums', status: 'SET', mode: 'simplified' },
+                         { id: 's-ap-2', name: 'MCDU PERF Page', status: 'ACTIVATE APPR PHASE', mode: 'simplified' },
+                         { id: 's-ap-3', name: 'FCU APPR MODE', status: 'SET', mode: 'simplified' },
+                         { id: 's-ap-4', name: 'Flaps/Slats', status: 'EXTEND ON SCHED', mode: 'simplified' },
+
+                         { id: 'v-ap-1', name: 'Minimums', status: 'SET', mode: 'verbose' },
+                         { id: 'v-ap-2', name: 'MCDU PERF Page', status: 'ACTIVATE APPR PHASE', mode: 'verbose' },
+                         { id: 'v-ap-3', name: 'FCU APPR MODE', status: 'SET', mode: 'verbose' },
+                         { id: 'v-ap-4', name: 'Flaps/Slats', status: 'EXTEND ON SCHED', mode: 'verbose' },
+                         { id: 'v-ap-5', name: 'Ground Spoilers', status: 'ARM', mode: 'verbose' },
+                         { id: 'v-ap-6', name: 'Exterior Lights', status: 'ON', mode: 'verbose' },
+                    ],
+                    "Landing": [
+                         { id: 's-ld-1', name: 'SIGNS', status: 'ON', mode: 'simplified' },
+                         { id: 's-ld-2', name: 'G/A Altitude', status: 'SET', mode: 'simplified' },
+                         { id: 's-ld-3', name: 'Cabin Crew', status: 'ADVISED', mode: 'simplified' },
+                         { id: 's-ld-4', name: 'Flaps/Slats', status: 'EXTENDED', mode: 'simplified' },
+                         { id: 's-ld-5', name: 'Landing Gear', status: 'DOWN', mode: 'simplified' },
+
+                         { id: 'v-ld-1', name: 'SIGNS', status: 'ON', mode: 'verbose' },
+                         { id: 'v-ld-2', name: 'G/A Altitude', status: 'SET', mode: 'verbose' },
+                         { id: 'v-ld-3', name: 'Cabin Crew', status: 'ADVISED', mode: 'verbose' },
+                         { id: 'v-ld-4', name: 'ECAM MEMO (LDG)', status: 'CHECK (NO BLUE)', mode: 'verbose' },
+                         { id: 'v-ld-5', name: 'Flaps/Slats', status: 'EXTENDED', mode: 'verbose' },
+                         { id: 'v-ld-6', name: 'Landing Gear', status: 'DOWN', mode: 'verbose' },
+                         { id: 'v-ld-7', name: 'ECAM WHEEL Page', status: 'CHECK 3 GREEN', mode: 'verbose' },
+                         { id: 'v-ld-8', name: 'ECAM LDG MEMO', status: 'CHECK NO BLUE', mode: 'verbose' },
                     ]
                 },
                 "post-flight": {
@@ -570,7 +536,7 @@
             const advancePopupDismiss = document.getElementById('auto-advance-dismiss');
 
             const stateKeys = {
-                checklist: 'tolissA320ChecklistState_v8',
+                checklist: 'tolissA320ChecklistState_v9',
                 theme: 'tolissA320Theme_v2',
                 engine: 'tolissA320Engine_v2',
                 mode: 'tolissA320Mode_v2'
@@ -692,6 +658,7 @@
                 return new Promise((resolve) => { resolveConfirm = resolve; });
             };
 
+            // --- Event Listeners & Initialization ---
             modalConfirm.addEventListener('click', () => {
                 modal.style.display = 'none';
                 if (resolveConfirm) resolveConfirm(true);
@@ -751,6 +718,7 @@
                 }
             });
 
+            // Initial Load
             const savedTheme = loadState(stateKeys.theme, 'dark-theme');
             const savedEngine = loadState(stateKeys.engine, 'CFM');
             const savedMode = loadState(stateKeys.mode, 'simplified-mode');
